@@ -22,7 +22,7 @@ double calculateDaysFromEpoch(int epoch){
   return hoursToDays(minutesToHours(secondsToMinutes(epoch)));
 }
 // Doing with Premimplimented library time.h
-struct tm* getDateTimeFromEpoch(time_t epoch){
+/*struct tm* getDateTimeFromEpoch(time_t epoch){
   struct tm* timeinfo;
   timeinfo = localtime(&epoch);
   return timeinfo;
@@ -33,16 +33,16 @@ string formatDateTime(struct tm* timeinfo){
   strftime(buf,sizeof(buf),"%Y-%m-%d %H:%M:%S",timeinfo);
   string formatedDateTime = buf;
   return formatedDateTime;
-}
+}*/
 
 int main(){
   int epoch = 1000; //seconds
   // epoch starts from 1-Jan-1970
   double days = calculateDaysFromEpoch(epoch);
   std::cout<<days<<" days from epoch"<<endl;
-  time_t timefromEpoch = (time_t)epoch;
-  struct tm* timeinfo= getDateTimeFromEpoch(timefromEpoch);
-  string format = formatDateTime(timeinfo);
-  std::cout<<"Datetime("<<epoch<<"):"<<format;
+  //time_t timefromEpoch = (time_t)epoch;
+  //struct tm* timeinfo= getDateTimeFromEpoch(timefromEpoch);
+  //string format = formatDateTime(timeinfo);
+  //std::cout<<"Datetime("<<epoch<<"):"<<format;
   return 1;
 }

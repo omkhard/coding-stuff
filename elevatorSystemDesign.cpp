@@ -6,7 +6,8 @@ private:
   int totalPeeps,floor;
   string elevatorDirection;
 public:
-  Elevator(int startNumofPeeps,string direction,int floor); // Constructor declared
+  int stopAt;
+  Elevator(int startNumofPeeps,string direction,int floorElev,int stopat); // Constructor declared
   void inElevator(int num){
     totalPeeps = num+totalPeeps;
   }
@@ -37,24 +38,37 @@ public:
         floor = floor - 1;
         sleep(2); // in 2 sec it reach other down floors
       }
+      if(floor == 5){
+        elevatorDirection = "down";
+      }
+      if(floor == 0){
+        elevatorDirection = "up";
+      }
+      if(floor == stopAt){
+        stopElevator();
+        return ;
+      }
     }
+  }
+  int stopElevator(){
+    return 1;// start from here (pending ...)
   }
   string detectDirection(){
     return elevatorDirection;
   }
 };
-Elevator::Elevator(int startNumofPeeps,string direction,int floor){
+// defined variables names should be different
+Elevator::Elevator(int startNumofPeeps,string direction,int floorElev,int stopat){
   totalPeeps = startNumofPeeps;
   elevatorDirection = direction;
+  floor = floorElev;
+  stopAt = stopat;
 }
 int main(){
   int count=0;
   string dir;
-  Elevator elv(2,"up",0);
+  Elevator elv(2,"up",2,3);
   elv.startElevator();
-  elv.inElevator(2);
-  elv.outElevator(1);
-  elv.inElevator(2);
   count = elv.displayPeepsCount();
   dir = elv.detectDirection();
   std::cout<<count<<" Direction: "<<dir<<endl;

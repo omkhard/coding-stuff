@@ -9,6 +9,7 @@ preparing it like , first man leaves first and second leaves second
 problems:
 
 onces stoped , can't be started again
+USING FIFO algorithm , has to do many modifications
 */
 class Elevator{
 private:
@@ -60,7 +61,7 @@ public:
 
       }
       if(startAt == last_peep_floor){
-        std::cout<<"LAST PEEP GOING OUT:";
+        std::cout<<"LAST PEEP GOING OUT at "<<last_peep_floor<<":"<<endl;
         stopElevator();
         return ;
       }

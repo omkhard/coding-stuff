@@ -14,10 +14,12 @@ from subprocess import Popen , PIPE
 
 
 class IPAllocator:
+  IPS = {}
   def __init__(self,network_attachment):
     self.network_attachment = network_attachment
 
-  def get_deploy(self):
+  @classmethod # Used decorator here for accessing class attributes
+  def get_deploy_info(cls):
     list_envs = []
     process_output = Popen(['kubectl', 'get','deploy', '-A', '-o', 'json'],stdout=PIPE,stderr=PIPE)
     stdout , stderr = process_output.communicate()
@@ -38,14 +40,21 @@ class IPAllocator:
         for j in range(len(deploy_template_spec_containers)):
           deploy_template_spec_containers_env = json.loads(json.dumps(deploy_template_spec_containers[j]))
           print(deploy_template_spec_containers_env['env']) # assuming HA_MGT: stays in env and env also stays 
+          for k in range(len(deploy_template_spec_containers_env['env'])):
+            print(type(IPAllocator.IPS))
+            cls.IPS[deploy_template_spec_containers_env['env'][k]['name']] = deploy_template_spec_containers_env['env'][k]['value']
     except:
-      print("Some Deployment is GHOSTED!!")
+      print("Some Deployment is GHOSTED(Doesn't have 'env' IPs)!!")
       pass
       
    # ['template']['spec']['containers'][0]['env']
+  @classmethod # Used decorator here for accessing class attributes 
+  def ip_analyser(cls):
+    print(cls.IPS)
 
 
 
 if __name__ ==  "__main__":
   new_obj = IPAllocator("ext-static-net-1")
-  new_obj.get_deploy()
+  new_obj.get_deploy_info()
+  new_obj.ip_analyser()

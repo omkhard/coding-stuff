@@ -6,6 +6,13 @@ Solution:
 it will take the net-att name and find out the IP which are not in use
 * Assuming that in a POD's deployment [Environment: -| HA_MGT_IP:]
 Some thing like this has been described already
+
+
+Solved using ,:;
+
+1. applied json and re module for ip_analyser
+
+stored IP's under: deploy.items.[].spec.template.spec.containers.[].env
 """
 import re
 import os, sys
@@ -41,7 +48,6 @@ class IPAllocator:
           deploy_template_spec_containers_env = json.loads(json.dumps(deploy_template_spec_containers[j]))
           print(deploy_template_spec_containers_env['env']) # assuming HA_MGT: stays in env and env also stays 
           for k in range(len(deploy_template_spec_containers_env['env'])):
-            print(type(IPAllocator.IPS))
             cls.IPS[deploy_template_spec_containers_env['env'][k]['name']] = deploy_template_spec_containers_env['env'][k]['value']
     except:
       print("Some Deployment is GHOSTED(Doesn't have 'env' IPs)!!")
@@ -50,11 +56,16 @@ class IPAllocator:
    # ['template']['spec']['containers'][0]['env']
   @classmethod # Used decorator here for accessing class attributes 
   def ip_analyser(cls):
-    print(cls.IPS)
+    ipies = cls.IPS
+    ips = []
+    pattern = r"(\w)+_IP$"
+    for i in ipies:
+      if re.match(pattern,i):
+        ips.append(ipies[i])
 
-
+    return ips 
 
 if __name__ ==  "__main__":
   new_obj = IPAllocator("ext-static-net-1")
   new_obj.get_deploy_info()
-  new_obj.ip_analyser()
+  print(new_obj.ip_analyser())

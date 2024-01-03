@@ -28,7 +28,7 @@ int main(){
     for(string sst:ss){
         count=0;
         for(int i=0;i<n;i++){
-            if(strcmp(sst.c_str(),vs[i].c_str())==0){
+            if(strcmp(sst.c_str(),vs[i].c_str())==0){ // string to char string conversion
                 count+=1;
             }
         }

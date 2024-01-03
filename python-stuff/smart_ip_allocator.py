@@ -7,6 +7,8 @@ it will take the net-att name and find out the IP which are not in use
 * Assuming that in a POD's deployment [Environment: -| HA_MGT_IP:]
 Some thing like this has been described already
 
+Problems faced:
+Can't use self in @classmethod
 
 Solved using ,:;
 
@@ -27,9 +29,8 @@ class IPAllocator:
 
   @classmethod # Used decorator here for accessing class attributes
   def get_deploy_info(cls):
-    list_envs = []
     process_output = Popen(['kubectl', 'get','deploy', '-A', '-o', 'json'],stdout=PIPE,stderr=PIPE)
-    stdout , stderr = process_output.communicate()
+    stdout = process_output.communicate()[0] #as its a tuple
     deploy_data = json.loads(stdout.decode('utf-8'))
     #deploy_data['items'][0]['spec']['template']
     #
@@ -55,17 +56,24 @@ class IPAllocator:
       
    # ['template']['spec']['containers'][0]['env']
   @classmethod # Used decorator here for accessing class attributes 
-  def ip_analyser(cls):
+  def ip_analyser(cls,network_attachment) -> list:
+    cls.get_deploy_info() # calling deploy info in here
     ipies = cls.IPS
     ips = []
+    print(network_attachment)
     pattern = r"(\w)+_IP$"
     for i in ipies:
       if re.match(pattern,i):
         ips.append(ipies[i])
-
-    return ips 
+    process_output = Popen(['kubectl','get','network-attachment-definitions',network_attachment,'-o','json'],stdout=PIPE,stderr=PIPE)
+    stdout = process_output.communicate()[0] # as its a tuple 
+    data = json.loads(stdout.decode('utf-8'))
+    rangeStart = json.loads(data["spec"]["config"])["ipam"]["ranges"][0][0]["rangeStart"] #getting end and start out
+    rangeEnd = json.loads(data["spec"]["config"])["ipam"]["ranges"][0][0]["rangeEnd"]
+    print("rangeStart:",rangeStart,"\nrangeEnd:",rangeEnd)
+    return ips
 
 if __name__ ==  "__main__":
-  new_obj = IPAllocator("ext-static-net-1")
-  new_obj.get_deploy_info()
-  print(new_obj.ip_analyser())
+  network_attachment_def = "ext-static-net-1"
+  new_obj = IPAllocator(network_attachment_def)
+  print(new_obj.ip_analyser(network_attachment_def))

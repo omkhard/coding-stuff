@@ -51,7 +51,7 @@ class IPAllocator:
           for k in range(len(deploy_template_spec_containers_env['env'])):
             cls.IPS[deploy_template_spec_containers_env['env'][k]['name']] = deploy_template_spec_containers_env['env'][k]['value']
     except:
-      print("Some Deployment is GHOSTED(Doesn't have 'env' IPs)!!")
+      print("Some Deployments are GHOSTED(Doesn't have 'env' IPs)!!")
       pass
       
    # ['template']['spec']['containers'][0]['env']

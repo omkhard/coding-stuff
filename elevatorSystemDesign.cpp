@@ -10,17 +10,22 @@ problems:
 
 onces stoped , can't be started again
 USING FIFO algorithm , has to do many modifications
+
+** Implemented last_peep_floor , here last_peep_floor will get updated 
+everytime one gets out , it gets updated to the second last peep's 
+floor .
+
 */
 class Elevator{
 private:
   int totalPeeps,startAt,last_peep_floor;
-  string elevatorDirection;
   bool changeDirection=false;
+  vector<int> totalPeepsLeft; // making this vector to not prevent from loop
 public:
   int stopAt;
-  int secondStart = startAt;
-  vector<int> secondStartAt;
-  Elevator(int startNumofPeeps,string direction,int startat,int stopat ,int lastPeepAt); // Constructor declared
+  int secondStart;
+  string elevatorDirection;
+  Elevator(int startNumofPeeps,int startat,int stopat ,int lastPeepAt); // Constructor declared
   void inElevator(int num){
     totalPeeps = num+totalPeeps;
   }
@@ -39,45 +44,51 @@ public:
     return totalPeeps;
   }
   void startElevator(){// this function will occur every time someone getsIn (pending...)
-    while(1){
+    secondStart = startAt;
+    while( !(startAt == stopAt) ){
 
-      if(elevatorDirection=="up" and changeDirection){
+      if(elevatorDirection=="up" and changeDirection ==true){
         std::cout<<"GOING UP::"<<endl;
         startAt = startAt + 1;
         sleep(2); // in 2 seconds it will reach other floor
       }
-      if(elevatorDirection=="down" and changeDirection){
+      if(elevatorDirection=="down" and changeDirection == true){
         std::cout<<"GOING DOWN::"<<startAt<<endl;
         startAt = startAt - 1;
         sleep(2); // in 2 sec it reach other down floors
       }
-      if(startAt == 6 or last_peep_floor < secondStart){
+      if((startAt==6  or last_peep_floor < startAt)){
         elevatorDirection = "down"; // it will go till 5th floor
         changeDirection = true;
       }
-      if(startAt == -1 or last_peep_floor > secondStart){
+      if((startAt == -1 or last_peep_floor > startAt)){
         elevatorDirection = "up"; // it will go till 0(ground) floor
         changeDirection = true;
 
       }
-      if(startAt == last_peep_floor){
+      if(startAt == last_peep_floor and totalPeepsLeft.size()==0){
         std::cout<<"LAST PEEP GOING OUT at "<<last_peep_floor<<":"<<endl;
+        last_peep_floor=stopAt;
+        totalPeepsLeft.push_back(startAt);
         stopElevator();
-        return ;
       }
+      std::cout<<startAt<<elevatorDirection;
     }
+    std::cout<<"REACHED";
   }
-  int stopElevator(){
-    return 1;// start from here (pending ...)
-  }
+  void stopElevator(){
+      std::cout<<"ELEVATOR STOPPED!!!";
+      sleep(2);// sleeps for 2 sec when stopElevator @ floor
+
+    }
   string detectDirection(){
     return elevatorDirection;
   }
 };
 // defined variables names should be different
-Elevator::Elevator(int startNumofPeeps,string direction,int startat,int stopat,int lastPeepAt){
+Elevator::Elevator(int startNumofPeeps,int startat,int stopat,int lastPeepAt){
   totalPeeps = startNumofPeeps;
-  elevatorDirection = direction;
+  //elevatorDirection = direction;
   startAt = startat;
   stopAt = stopat;
   last_peep_floor = lastPeepAt;
@@ -89,11 +100,11 @@ int main(){
   std::cin>>startAt;
   std::cout<<"Enter StopAT:";
   std::cin>>stop_at;
-  std::cout<<"Enter DirectionOfGoing(String):";
-  std::cin>>dir;
+  //std::cout<<"Enter DirectionOfGoing(String):";
+  //std::cin>>dir;
   std::cout<<"Last peep leaving AT:";
   std::cin>>last_peep_at;
-  Elevator elv(init_peeps,dir,startAt,stop_at,last_peep_at);
+  Elevator elv(init_peeps,startAt,stop_at,last_peep_at);
   elv.startElevator();
   count = elv.displayPeepsCount();
   dir = elv.detectDirection();

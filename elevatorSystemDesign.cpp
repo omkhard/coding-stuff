@@ -72,9 +72,8 @@ public:
         totalPeepsLeft.push_back(startAt);
         stopElevator();
       }
-      std::cout<<startAt<<elevatorDirection;
     }
-    std::cout<<"REACHED";
+    std::cout<<"REACHED"<<endl;
   }
   void stopElevator(){
       std::cout<<"ELEVATOR STOPPED!!!";

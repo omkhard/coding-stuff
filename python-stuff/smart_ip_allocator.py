@@ -61,7 +61,7 @@ class IPAllocator:
     ipies = cls.IPS
     ips = []
     print(network_attachment)
-    pattern = r"(\w)+_IP$"
+    pattern = r"(\w)+_IP$" # regex for detecting env variables
     for i in ipies:
       if re.match(pattern,i):
         ips.append(ipies[i])

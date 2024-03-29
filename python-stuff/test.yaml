@@ -17,7 +17,7 @@ spec:
         ports:
         - containerPort: 8080
         env:
-        - name: MY_ENV_VAR
-          value: "my-value"
-        - name: ANOTHER_ENV_VAR
-          value: "another-value"
+        - name: HA_IP
+          value: "172.29.85.11"
+        - name: MGT0_IP
+          value: "172.29.86.12"

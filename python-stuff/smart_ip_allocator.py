@@ -42,19 +42,19 @@ class IPAllocator:
     # kinds of keys in it 
 
     ## {I have to do analysis part of IP later}
-    try:
-      for i in range(len(deploy_data['items'])):
+    for i in range(len(deploy_data['items'])):
+      try:
         deploy_template_spec_containers = deploy_data['items'][i]['spec']['template']['spec']['containers']
         for j in range(len(deploy_template_spec_containers)):
           deploy_template_spec_containers_env = json.loads(json.dumps(deploy_template_spec_containers[j]))
           print(deploy_template_spec_containers_env['env']) # assuming HA_MGT: stays in env and env also stays 
           for k in range(len(deploy_template_spec_containers_env['env'])):
             cls.IPS[deploy_template_spec_containers_env['env'][k]['name']] = deploy_template_spec_containers_env['env'][k]['value']
-    except:
-      print("Some Deployments are GHOSTED(Doesn't have 'env' IPs)!!")
-      pass
-      
-   # ['template']['spec']['containers'][0]['env']
+      except:
+        print("Some Deployments are GHOSTED(Doesn't have 'env' IPs)!!")
+        pass
+
+   #jq -r ".items[].spec.template[].container"
   @classmethod # Used decorator here for accessing class attributes 
   def ip_analyser(cls,network_attachment) -> list:
     cls.get_deploy_info() # calling deploy info in here

@@ -16,4 +16,4 @@ We can PIPE *stderr* and *stdout* and also make shell and cwd as **False** , we 
 This method is used for checking the PIPE'd err , and output in **Popen** used method and can be modified using raised exception if command failed using try/except.
 
 **In python-stuff**
-- The smart_ip_allocator is a great upcoming tool for detecting in a Running cluster , how many IPs are vacant and can be used in for newer/latest deployments.
+- The smart_ip_allocator is a great upcoming tool for detecting in a Running **Kubernetes** cluster, that  how many IPs are vacant after the deployments are using and can be used in for newer/latest deployments.

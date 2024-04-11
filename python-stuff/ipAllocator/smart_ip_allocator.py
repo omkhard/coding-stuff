@@ -21,10 +21,18 @@ Future Updates:
 """
 import re
 import os, sys
+import argparse
 import json 
 import logging 
 from subprocess import Popen , PIPE
 import datetime 
+
+parser = argparse.ArgumentParser()
+# defines the parser
+parser.add_argument('-c','--config-file',help="Pass the config file having details of K8s cluster",dest="config")
+# Gotta add parser things  ....
+# GOTTA DO this
+args = parser.parse_args()
 
 class IPAllocator:
   IPS = {}
@@ -90,9 +98,24 @@ if __name__ ==  "__main__":
   formatter = logging.Formatter(logformat)
   ch.setFormatter(formatter)
   logger.addHandler(ch)
-  network_attachment_def = "ext-static-net-1"
-  new_obj = IPAllocator(network_attachment_def)
-  # get the list of ips ,and  detect 
-  # how many from the IPrange can be used 
-  ips = new_obj.ip_analyser(network_attachment_def)
-  logger.info(ips)
+  if args.config:
+    p = open(args.config,'r')
+    data = {} # {[clusterName:[nad1,nad2]],}
+    configData = json.loads(p.read())
+    for i in range(len(configData["clusters"])):
+      clusterName = configData["clusters"][i]["name"]
+      data[clusterName] = [ j["networkName"] for j in configData["clusters"][i]["networks"]]
+      network_attachment_def = [k for k in data[clusterName]]
+      for l in network_attachment_def:
+        new_obj = IPAllocator(l)
+        # get the list of ips ,and  detect 
+        # how many from the IPrange can be used 
+        ips = new_obj.ip_analyser(l)
+        logger.info(ips)
+      
+    print("Collected Data")
+    print(data)
+    
+    sys.exit()
+
+  

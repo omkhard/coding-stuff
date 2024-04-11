@@ -1,0 +1,14 @@
+{
+    "clusters":[
+        {
+            "name":"default1",
+            "domain":"https://blr-ocp.myhost.com:8443/port/api",
+            "networks":[
+                {
+                    "networkName":"ext-static-net-1"
+                }
+            ]
+        }
+
+    ]
+}

@@ -7,7 +7,7 @@ using namespace std;
 /*
 Author:
     Om Khard
-    
+
 Design: 
     Making an application which :
     1. Takes arguments from CLI as name and age and appends that to a
@@ -45,4 +45,5 @@ int main(int argc, char* argv[]){
     DesignApplication d(argv[1],atoi(argv[2]));
     std::cout<<"Name: "<<d.getName()<<endl<<"Age: "<<d.getAge();
     d.updateDB();
+    return 0;
 }
